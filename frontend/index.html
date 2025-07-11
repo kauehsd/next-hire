@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NextHire - The future of job search</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%235a7fff'/%3E%3Cpath d='M20 44L44 20M44 20H28M44 20V36' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div id="bgDecorHome" class="body-bg-decor">
+    <div class="bg-gradient-left"></div>
+    <div class="bg-gradient-right"></div>
+    <i class="fas fa-arrow-up-right-dots bg-icon-decor"></i>
+  </div>
+  <div id="fraseMotivacionalHome" class="frase-motivacional">
+    <i class="fas fa-lightbulb"></i>
+    <span id="textoFraseMotivacional">Seu talento é o seu diferencial. Atualize seu perfil e conquiste novas oportunidades!</span>
+  </div>
+  <header class="header">
+    <div class="container header-content">
+      <div class="logo"><i class="fas fa-arrow-up-right-dots"></i> NextHire <span class="slogan">The future of job search.</span></div>
+      <nav>
+        <a href="#" class="nav-link" data-tab="home">Início</a>
+        <a href="#" class="nav-link" data-tab="buscar">Buscar Vagas</a>
+        <a href="#" class="nav-link" data-tab="perfil">Seu Perfil</a>
+        <button class="btn btn-login" id="abrirLogin">Entrar</button>
+      </nav>
+    </div>
+  </header>
+  <main class="main-content">
+    <!-- Guia: Início -->
+    <section id="tab-home" class="tab-section active">
+      <div class="hero-home">
+        <h1>Encontre a vaga perfeita para você!</h1>
+        <p>O Buscador de Vagas Inteligente conecta você às melhores oportunidades do mercado, de forma automatizada, personalizada e precisa.</p>
+        <button class="btn btn-primary" id="ctaBuscarVagas">Buscar Vagas</button>
+      </div>
+      <div class="stats-home">
+        <div class="stat-card"><i class="fas fa-users"></i><h3>+12.000</h3><p>Usuários ativos</p></div>
+        <div class="stat-card"><i class="fas fa-briefcase"></i><h3>+35.000</h3><p>Vagas indexadas</p></div>
+        <div class="stat-card"><i class="fas fa-globe"></i><h3>+10</h3><p>Áreas profissionais</p></div>
+        <div class="stat-card"><i class="fas fa-building"></i><h3>+1.500</h3><p>Empresas parceiras</p></div>
+      </div>
+      <div class="dicas-home">
+        <h2>Dicas para sua carreira</h2>
+        <ul>
+          <li><i class="fas fa-check"></i> Mantenha seu perfil sempre atualizado.</li>
+          <li><i class="fas fa-check"></i> Use palavras-chave relevantes nas suas habilidades.</li>
+          <li><i class="fas fa-check"></i> Cadastre-se para receber vagas por e-mail.</li>
+          <li><i class="fas fa-check"></i> Aproveite as recomendações personalizadas do sistema.</li>
+        </ul>
+      </div>
+      <div class="depoimentos-home">
+        <h2>Depoimentos de quem já conseguiu emprego</h2>
+        <div class="depoimentos-grid">
+          <div class="depoimento-card">
+            <p>“Consegui minha vaga dos sonhos em menos de 2 semanas usando o buscador!”</p>
+            <span>- Ana, Desenvolvedora</span>
+          </div>
+          <div class="depoimento-card">
+            <p>“O sistema é muito fácil de usar e as vagas realmente combinam com meu perfil.”</p>
+            <span>- Carlos, Analista de RH</span>
+          </div>
+          <div class="depoimento-card">
+            <p>“Recebi várias oportunidades por e-mail e fui contratado rapidamente!”</p>
+            <span>- Juliana, Designer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Guia: Buscar Vagas -->
+    <section id="tab-buscar" class="tab-section">
+      <div class="buscar-vagas-content">
+        <h2>Buscar Vagas</h2>
+        <form id="filtrosVagas" class="filtros-vagas">
+          <input type="text" id="filtroCargo" placeholder="Cargo desejado (ex: Analista, Designer, Vendedor)" autocomplete="off" />
+          <input type="text" id="filtroCidade" placeholder="Cidade" autocomplete="off" />
+          <select id="filtroNivel">
+            <option value="">Nível</option>
+            <option value="Estágio">Estágio</option>
+            <option value="Júnior">Júnior</option>
+            <option value="Pleno">Pleno</option>
+            <option value="Sênior">Sênior</option>
+            <option value="Especialista">Especialista</option>
+          </select>
+          <select id="filtroTipo">
+            <option value="">Tipo</option>
+            <option value="remoto">Remoto</option>
+            <option value="presencial">Presencial</option>
+          </select>
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+        <div class="vagas-lista" id="resultados"></div>
+      </div>
+    </section>
+    <!-- Guia: Seu Perfil -->
+    <section id="tab-perfil" class="tab-section">
+      <div class="perfil-content">
+        <h2>Seu Perfil</h2>
+        <div class="perfil-form-container">
+          <form id="perfilForm" class="perfil-form" autocomplete="off">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" required />
+              </div>
+              <div class="form-group">
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" id="sobrenome" name="sobrenome" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dataNascimento">Data de Nascimento</label>
+                <input type="date" id="dataNascimento" name="dataNascimento" required />
+              </div>
+              <div class="form-group">
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" name="cpf" maxlength="14" placeholder="000.000.000-00" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required />
+              </div>
+              <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" minlength="6" required autocomplete="new-password" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="estado">Estado</label>
+                <select id="estado" name="estado" required></select>
+              </div>
+              <div class="form-group">
+                <label for="cidade">Cidade</label>
+                <select id="cidade" name="cidade" required></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="width:100%">
+                <label for="area">Área de Atuação</label>
+                <div class="area-selector">
+                  <div class="area-grid" id="areaGrid"></div>
+                  <select id="area" name="area" required style="display: none;"></select>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nivel">Nível</label>
+                <select id="nivel" name="nivel" required>
+                  <option value="">Selecione</option>
+                  <option value="Estágio">Estágio</option>
+                  <option value="Júnior">Júnior</option>
+                  <option value="Pleno">Pleno</option>
+                  <option value="Sênior">Sênior</option>
+                  <option value="Especialista">Especialista</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="formacao">Formação</label>
+                <select id="formacao" name="formacao" required>
+                  <option value="">Selecione</option>
+                  <option value="Fundamental Incompleto">Fundamental Incompleto</option>
+                  <option value="Fundamental Cursando">Fundamental Cursando</option>
+                  <option value="Fundamental Completo">Fundamental Completo</option>
+                  <option value="Médio Incompleto">Médio Incompleto</option>
+                  <option value="Médio Cursando">Médio Cursando</option>
+                  <option value="Médio Completo">Médio Completo</option>
+                  <option value="Técnico Incompleto">Técnico Incompleto</option>
+                  <option value="Técnico Cursando">Técnico Cursando</option>
+                  <option value="Técnico Completo">Técnico Completo</option>
+                  <option value="Superior Incompleto">Superior Incompleto</option>
+                  <option value="Superior Cursando">Superior Cursando</option>
+                  <option value="Superior Completo">Superior Completo</option>
+                  <option value="Pós-graduação">Pós-graduação</option>
+                  <option value="Mestrado">Mestrado</option>
+                  <option value="Doutorado">Doutorado</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="pretensao">Pretensão Salarial</label>
+                <input type="number" id="pretensao" name="pretensao" min="0" placeholder="R$" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="experiencia">Experiência Profissional</label>
+                <input type="text" id="experiencia" name="experiencia" placeholder="Ex: 2 anos, Analista de RH, etc" />
+              </div>
+              <div class="form-group">
+                <label for="habilidades">Habilidades (separe por vírgula)</label>
+                <input type="text" id="habilidades" name="habilidades" placeholder="Ex: Excel, Liderança, JavaScript" />
+              </div>
+              <div class="form-group">
+                <label for="idiomas">Idiomas (separe por vírgula)</label>
+                <input type="text" id="idiomas" name="idiomas" placeholder="Ex: Inglês, Espanhol" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="linkedin">LinkedIn</label>
+                <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/seu-perfil" />
+              </div>
+              <div class="form-group">
+                <label for="github">GitHub</label>
+                <input type="url" id="github" name="github" placeholder="https://github.com/seu-usuario" />
+              </div>
+              <div class="form-group">
+                <label for="outroLink">Outro Link Profissional</label>
+                <input type="url" id="outroLink" name="outroLink" placeholder="https://" />
+              </div>
+            </div>
+            <button type="submit" id="salvarPerfilBtn" class="salvar-perfil-btn">Salvar Perfil</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- Modal de Login/Cadastro em etapas -->
+  <div id="modalLogin" class="modal">
+    <div class="modal-content">
+      <span class="close" id="fecharModalLogin">&times;</span>
+      <h2>Entrar</h2>
+      <form id="formLogin">
+        <label for="loginEmail">E-mail</label>
+        <input type="email" id="loginEmail" name="loginEmail" required />
+        <label for="loginSenha">Senha</label>
+        <input type="password" id="loginSenha" name="loginSenha" required />
+        <button type="submit" class="btn btn-primary">Entrar</button>
+      </form>
+      <div class="login-social">
+        <p>Ou entre com:</p>
+        <button class="btn-social google"><i class="fab fa-google"></i> Google</button>
+        <button class="btn-social linkedin"><i class="fab fa-linkedin"></i> LinkedIn</button>
+      </div>
+      <div class="login-options">
+        <p>Não tem cadastro? <a href="#" id="linkCriarConta">Criar conta</a></p>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-section">
+        <h3>NextHire</h3>
+        <p>The future of job search. Encontre as melhores oportunidades de emprego em todas as áreas, com tecnologia, precisão e automação.</p>
+        <div class="social-links">
+          <a href="https://linkedin.com/in/seu-linkedin" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://github.com/seu-github" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Links Úteis</h4>
+        <ul>
+          <li><a href="#">Sobre Nós</a></li>
+          <li><a href="#">Como Funciona</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Termos de Uso</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Suporte</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contato</a></li>
+          <li><a href="#">Reportar Bug</a></li>
+          <li><a href="#">Sugestões</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Estatísticas</h4>
+        <div class="stats">
+          <div class="stat"><span class="number">35.000+</span><span class="label">Vagas</span></div>
+          <div class="stat"><span class="number">12.000+</span><span class="label">Usuários</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 NextHire. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html> 

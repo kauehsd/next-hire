@@ -1,0 +1,16 @@
+{
+  "nome": "João Silva",
+  "email": "kauehenrique2910@gmail.com",
+  "estado": "SP",
+  "cidade": "São Paulo",
+  "localizacao": "São Paulo, São Paulo",
+  "area": "comercio",
+  "formacao": "informatica",
+  "pretensao": "1400",
+  "tecnologias": [
+    "JavaScript",
+    "Node.js",
+    "React"
+  ],
+  "nivel": "Pleno"
+}
