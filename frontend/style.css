@@ -1544,51 +1544,57 @@ button:hover, .btn:hover, input[type="submit"]:hover {
 } 
 
 /* Modal de login compacto */
+#modalLogin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(44, 62, 80, 0.25);
+  z-index: 2000;
+  transition: background 0.3s cubic-bezier(.4,0,.2,1);
+}
 #modalLogin .modal-content {
-  min-width: 0;
-  max-width: 400px;
-  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-  margin: auto;
-  top: 50%; left: 50%; transform: translate(-50%, -50%);
-  position: absolute;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  min-width: 340px;
+  max-width: 95vw;
+  animation: modalFadeIn 0.35s cubic-bezier(.4,0,.2,1);
 }
-#modalLogin h2 {
-  font-size: 1.3rem;
-  margin-bottom: 1.1rem;
-  text-align: center;
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-40px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
-#modalLogin form label {
-  font-size: 1rem;
-  margin-bottom: 0.2rem;
-}
-#modalLogin input {
-  font-size: 1rem;
-  padding: 0.6rem 0.8rem;
-  margin-bottom: 0.7rem;
-}
-#modalLogin .btn-primary {
-  font-size: 1.05rem;
-  padding: 0.7rem 0;
+
+/* Melhorar botão Entrar */
+#modalLogin .btn-primary, #modalLogin button[type="submit"] {
+  background: linear-gradient(90deg, #5a7fff 0%, #7f5aff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.9rem 0;
   width: 100%;
   margin-bottom: 0.7rem;
+  box-shadow: 0 2px 8px rgba(90,127,255,0.08);
+  cursor: pointer;
+  transition: background 0.25s, box-shadow 0.25s;
 }
-#modalLogin .login-social {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+#modalLogin .btn-primary:hover, #modalLogin button[type="submit"]:hover {
+  background: linear-gradient(90deg, #7f5aff 0%, #5a7fff 100%);
+  box-shadow: 0 4px 16px rgba(90,127,255,0.16);
 }
-#modalLogin .btn-social {
-  font-size: 0.97rem;
-  padding: 0.5rem 1rem;
-  margin: 0 0.2rem;
+
+/* Fluidez extra para modal */
+#modalLogin.active {
+  animation: modalFadeIn 0.35s cubic-bezier(.4,0,.2,1);
 }
-#modalLogin .login-options {
-  text-align: center;
-  font-size: 0.97rem;
-  margin-top: 0.5rem;
-}
-@media (max-width: 600px) {
-  #modalLogin .modal-content { max-width: 98vw; padding: 0.7rem 0.2rem; }
-} 
 
 .vagas-lista {
   display: flex;
