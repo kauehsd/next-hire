@@ -643,10 +643,15 @@ const fecharModalLogin = document.getElementById('fecharModalLogin');
 function abrirModalLogin() {
   modalLogin.classList.add('active');
 }
-fecharModalLogin.onclick = () => modalLogin.classList.remove('active');
-window.onclick = function(event) {
-  if (event.target === modalLogin) modalLogin.classList.remove('active');
-};
+if (fecharModalLogin) {
+  fecharModalLogin.onclick = () => modalLogin.classList.remove('active');
+}
+// Só abre modal ao clicar em 'Entrar'
+const btnEntrar = document.getElementById('abrirLogin');
+if (btnEntrar) {
+  btnEntrar.onclick = abrirModalLogin;
+}
+// Remover qualquer chamada automática a abrirModalLogin ou checarLoginOuAbrirModal
 
 // Link para criar conta
 const linkCriarConta = document.getElementById('linkCriarConta');
@@ -698,7 +703,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
 });
 
 document.getElementById('ctaBuscarVagas').onclick = () => ativarGuia('buscar');
-document.getElementById('abrirLogin').onclick = abrirModalLogin;
 document.getElementById('abrirLoginBuscar').onclick = abrirModalLogin;
 
 // Tabs login/cadastro

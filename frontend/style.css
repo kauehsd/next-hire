@@ -1543,32 +1543,21 @@ button:hover, .btn:hover, input[type="submit"]:hover {
   .frase-motivacional { left: 1vw; bottom: 1vw; max-width: 90vw; }
 } 
 
-/* Modal de login compacto */
-#modalLogin {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(44, 62, 80, 0.25);
-  z-index: 2000;
-  transition: background 0.3s cubic-bezier(.4,0,.2,1);
-}
+/* Modal de login compacto e título centralizado */
 #modalLogin .modal-content {
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(44,62,80,0.18);
-  padding: 2.5rem 2.5rem 2rem 2.5rem;
-  min-width: 340px;
-  max-width: 95vw;
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  min-width: 0;
+  max-width: 400px;
+  width: 100%;
   animation: modalFadeIn 0.35s cubic-bezier(.4,0,.2,1);
 }
-@keyframes modalFadeIn {
-  from { opacity: 0; transform: translateY(-40px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+#modalLogin h2, #modalLogin .modal-content h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1.1rem;
+  text-align: center;
 }
 
 /* Melhorar botão Entrar */
