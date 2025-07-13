@@ -47,7 +47,7 @@ async function popularCidades(uf) {
 // Carregar temas de áreas
 async function carregarTemasAreas() {
   try {
-    const response = await fetch('http://localhost:3000/temas-areas');
+    const response = await fetch(`${API_URL}/temas-areas`);
     temasAreas = await response.json();
     criarSeletorAreas();
   } catch (error) {
@@ -313,7 +313,7 @@ function scrollToSection(sectionId) {
 // Carregar perfil existente
 async function carregarPerfil() {
   try {
-    const response = await fetch('http://localhost:3000/perfil');
+    const response = await fetch(`${API_URL}/perfil`);
     const perfil = await response.json();
     
     if (perfil) {
@@ -366,7 +366,7 @@ async function salvarPerfil(e) {
   };
 
   try {
-    const response = await fetch('http://localhost:3000/perfil', {
+    const response = await fetch(`${API_URL}/perfil`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -394,7 +394,7 @@ async function buscarVagas() {
   resultados.innerHTML = '<div class="loading"><p>🔍 Buscando vagas...</p></div>';
 
   try {
-    const response = await fetch('http://localhost:3000/vagas');
+    const response = await fetch(`${API_URL}/vagas`);
     const data = await response.json();
     
     if (data.vagas && data.vagas.length > 0) {
@@ -467,7 +467,7 @@ async function aplicarFiltros() {
     if (nivel) params.append('nivel', nivel);
     if (tipo) params.append('tipo', tipo);
     
-    const response = await fetch(`http://localhost:3000/vagas?${params.toString()}`);
+    const response = await fetch(`${API_URL}/vagas?${params.toString()}`);
     const data = await response.json();
     
     if (data.vagas && data.vagas.length > 0) {
@@ -815,7 +815,7 @@ function renderizarCadastroEtapas() {
     if (dados.pretensao && dados.pretensao < 0) return alert('Pretensão salarial inválida.');
     // Enviar para backend
     try {
-      const resp = await fetch('http://localhost:3000/api/usuarios/cadastrar', {
+      const resp = await fetch(`${API_URL}/api/usuarios/cadastrar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dados)
@@ -894,12 +894,6 @@ function checarLoginOuAbrirModal() {
   if (!usuarioLogado) abrirModalLogin();
   // Se logado, pode prosseguir normalmente (futuro)
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.btn-candidatar, .btn-detalhes').forEach(btn => {
-    btn.onclick = checarLoginOuAbrirModal;
-  });
-}); 
 
 // Autocomplete de cidades para o filtro de cidade
 async function autocompleteCidadeFiltro() {
@@ -1005,7 +999,7 @@ async function buscarVagasComFiltros(e) {
   resultados.innerHTML = '<div class="loading"><p>🔍 Buscando vagas...</p></div>';
   try {
     const query = montarQueryVagas();
-    const response = await fetch(`http://localhost:3000/vagas?${query}`);
+    const response = await fetch(`${API_URL}/vagas?${query}`);
     const data = await response.json();
     const vagas = data.vagas || [];
     if (vagas.length > 0) {
