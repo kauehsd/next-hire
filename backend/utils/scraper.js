@@ -1,19 +1,57 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const Vaga = require('../models/Vaga');
+const fs = require('fs');
 
-// Função para fazer scraping do site Remotar
+// Configuração centralizada de URLs
+const scrapingConfig = {
+  remotar: {
+    base: 'https://remotar.com.br',
+    vagas: [
+      '/vagas',
+      '/vagas?page=2',
+      '/vagas?page=3'
+    ]
+  }
+};
+
+// Função utilitária para registrar alerta em relatório
+function registrarAlerta(site, mensagem) {
+  const logMsg = `[${new Date().toISOString()}] [${site}] ${mensagem}\n`;
+  fs.appendFileSync('scraping_alertas.log', logMsg);
+  console.warn(logMsg);
+}
+
+// Função para tentar encontrar nova URL de vagas automaticamente
+async function buscarNovaUrlRemotar() {
+  try {
+    const response = await axios.get(scrapingConfig.remotar.base, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      },
+      timeout: 10000
+    });
+    const $ = cheerio.load(response.data);
+    const links = [];
+    $('a').each((i, el) => {
+      const href = $(el).attr('href');
+      if (href && /vaga|job|emprego/i.test(href)) {
+        links.push(href.startsWith('http') ? href : scrapingConfig.remotar.base + href);
+      }
+    });
+    return links;
+  } catch (error) {
+    registrarAlerta('Remotar', 'Falha ao buscar links na página inicial: ' + error.message);
+    return [];
+  }
+}
+
+// Função para fazer scraping do site Remotar com fallback automático
 async function scrapeRemotar(tecnologias, nivel) {
   try {
     const vagas = [];
-    
-    // URLs para diferentes páginas do Remotar
-    const urls = [
-      'https://remotar.com.br/vagas',
-      'https://remotar.com.br/vagas?page=2',
-      'https://remotar.com.br/vagas?page=3'
-    ];
-
+    let urls = scrapingConfig.remotar.vagas.map(u => u.startsWith('http') ? u : scrapingConfig.remotar.base + u);
+    let erro404 = false;
     for (const url of urls) {
       try {
         const response = await axios.get(url, {
@@ -22,7 +60,6 @@ async function scrapeRemotar(tecnologias, nivel) {
           },
           timeout: 10000
         });
-
         const $ = cheerio.load(response.data);
         
         // Seletores específicos do Remotar (pode precisar de ajustes)
@@ -73,7 +110,7 @@ async function scrapeRemotar(tecnologias, nivel) {
               salario: salario || 'A combinar',
               tecnologias: tecnologiasEncontradas.length > 0 ? tecnologiasEncontradas : ['Não especificado'],
               nivel: nivelVaga,
-              link: link.startsWith('http') ? link : `https://remotar.com.br${link}`,
+              link: link.startsWith('http') ? link : `${scrapingConfig.remotar.base}${link}`,
               fonte: 'Remotar'
             });
           }
@@ -83,53 +120,125 @@ async function scrapeRemotar(tecnologias, nivel) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         
       } catch (error) {
-        console.log(`Erro ao fazer scraping de ${url}:`, error.message);
+        if (error.response && error.response.status === 404) {
+          erro404 = true;
+          registrarAlerta('Remotar', `404 na URL: ${url}`);
+        } else {
+          registrarAlerta('Remotar', `Erro ao acessar ${url}: ${error.message}`);
+        }
       }
     }
-    
+    // Se todas URLs deram 404, tentar buscar nova URL automaticamente
+    if (erro404 && vagas.length === 0) {
+      const novasUrls = await buscarNovaUrlRemotar();
+      if (novasUrls.length > 0) {
+        registrarAlerta('Remotar', `Novas URLs encontradas: ${novasUrls.join(', ')}`);
+        // Tenta scraping na primeira nova URL encontrada
+        try {
+          const response = await axios.get(novasUrls[0], {
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            },
+            timeout: 10000
+          });
+          const $ = cheerio.load(response.data);
+          $('.vaga-item, .job-card, .vacancy-item').each((index, element) => {
+            const $el = $(element);
+            const titulo = $el.find('.job-title, .vaga-titulo, h3').text().trim();
+            const empresa = $el.find('.company-name, .empresa').text().trim();
+            const localizacao = $el.find('.location, .localizacao').text().trim() || 'Remoto';
+            const salario = $el.find('.salary, .salario').text().trim();
+            const link = $el.find('a').attr('href');
+            const descricao = $el.find('.description, .descricao').text().toLowerCase();
+            const tecnologiasEncontradas = [];
+            const techList = [
+              'javascript', 'js', 'react', 'vue', 'angular', 'node.js', 'nodejs', 'python',
+              'java', 'php', 'c#', 'c++', 'go', 'rust', 'ruby', 'django', 'flask',
+              'express', 'mongodb', 'mysql', 'postgresql', 'redis', 'docker', 'kubernetes',
+              'aws', 'azure', 'gcp', 'html', 'css', 'sass', 'less', 'typescript', 'ts'
+            ];
+            techList.forEach(tech => {
+              if (descricao.includes(tech) || titulo.toLowerCase().includes(tech)) {
+                tecnologiasEncontradas.push(tech);
+              }
+            });
+            let nivelVaga = 'Pleno';
+            const textoCompleto = (titulo + ' ' + descricao).toLowerCase();
+            if (textoCompleto.includes('júnior') || textoCompleto.includes('junior') || 
+                textoCompleto.includes('estagiário') || textoCompleto.includes('estagiario')) {
+              nivelVaga = 'Júnior';
+            } else if (textoCompleto.includes('sênior') || textoCompleto.includes('senior') ||
+                       textoCompleto.includes('lead') || textoCompleto.includes('arquiteto')) {
+              nivelVaga = 'Sênior';
+            }
+            if (titulo && link) {
+              vagas.push({
+                titulo,
+                empresa: empresa || 'Empresa não informada',
+                localizacao: localizacao || 'Remoto',
+                salario: salario || 'A combinar',
+                tecnologias: tecnologiasEncontradas.length > 0 ? tecnologiasEncontradas : ['Não especificado'],
+                nivel: nivelVaga,
+                link: link.startsWith('http') ? link : `${scrapingConfig.remotar.base}${link}`,
+                fonte: 'Remotar'
+              });
+            }
+          });
+        } catch (error) {
+          registrarAlerta('Remotar', `Falha ao tentar scraping na nova URL: ${novasUrls[0]} - ${error.message}`);
+        }
+      } else {
+        registrarAlerta('Remotar', 'Nenhuma nova URL de vagas encontrada automaticamente. Ação humana necessária.');
+      }
+    }
     return vagas;
     
   } catch (error) {
-    console.error('Erro no scraping do Remotar:', error);
+    registrarAlerta('Remotar', 'Erro geral no scraping: ' + error.message);
     return [];
   }
 }
 
 // Função para fazer scraping do LinkedIn (simulado)
 async function scrapeLinkedIn(tecnologias, nivel) {
-  // Como o LinkedIn tem proteções anti-bot, vamos simular resultados
-  const vagasSimuladas = [
-    {
-      titulo: 'Desenvolvedor Full Stack',
-      empresa: 'Tech Solutions',
-      localizacao: 'São Paulo, SP',
-      salario: 'R$ 6.000 - 9.000',
-      tecnologias: ['React', 'Node.js', 'JavaScript'],
-      nivel: 'Pleno',
-      link: 'https://linkedin.com/jobs/view/123456',
-      fonte: 'LinkedIn'
-    },
-    {
-      titulo: 'Frontend Developer',
-      empresa: 'Digital Innovation',
-      localizacao: 'Remoto',
-      salario: 'R$ 4.500 - 7.000',
-      tecnologias: ['React', 'TypeScript', 'CSS'],
-      nivel: 'Júnior',
-      link: 'https://linkedin.com/jobs/view/123457',
-      fonte: 'LinkedIn'
-    }
-  ];
-  
-  return vagasSimuladas.filter(vaga => {
-    const matchTecnologias = vaga.tecnologias.some(tech => 
-      tecnologias.some(userTech => 
-        userTech.toLowerCase().includes(tech.toLowerCase()) || 
-        tech.toLowerCase().includes(userTech.toLowerCase())
-      )
-    );
-    return matchTecnologias && vaga.nivel === nivel;
-  });
+  try {
+    // Como o LinkedIn tem proteções anti-bot, vamos simular resultados
+    const vagasSimuladas = [
+      {
+        titulo: 'Desenvolvedor Full Stack',
+        empresa: 'Tech Solutions',
+        localizacao: 'São Paulo, SP',
+        salario: 'R$ 6.000 - 9.000',
+        tecnologias: ['React', 'Node.js', 'JavaScript'],
+        nivel: 'Pleno',
+        link: 'https://linkedin.com/jobs/view/123456',
+        fonte: 'LinkedIn'
+      },
+      {
+        titulo: 'Frontend Developer',
+        empresa: 'Digital Innovation',
+        localizacao: 'Remoto',
+        salario: 'R$ 4.500 - 7.000',
+        tecnologias: ['React', 'TypeScript', 'CSS'],
+        nivel: 'Júnior',
+        link: 'https://linkedin.com/jobs/view/123457',
+        fonte: 'LinkedIn'
+      }
+    ];
+    
+    return vagasSimuladas.filter(vaga => {
+      const matchTecnologias = vaga.tecnologias.some(tech => 
+        tecnologias.some(userTech => 
+          userTech.toLowerCase().includes(tech.toLowerCase()) || 
+          tech.toLowerCase().includes(userTech.toLowerCase())
+        )
+      );
+      return matchTecnologias && vaga.nivel === nivel;
+    });
+  } catch (error) {
+    console.error('Erro no scraping do LinkedIn:', error);
+    return [];
+  }
 }
 
 // Função para fazer scraping do Indeed

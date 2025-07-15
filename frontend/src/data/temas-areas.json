@@ -1,0 +1,52 @@
+{
+  "tecnologia": {
+    "nome": "Tecnologia",
+    "icone": "fas fa-laptop-code",
+    "descricao": "Desenvolvimento, TI, programação, suporte, etc."
+  },
+  "saude": {
+    "nome": "Saúde",
+    "icone": "fas fa-heartbeat",
+    "descricao": "Medicina, enfermagem, farmácia, psicologia, etc."
+  },
+  "administracao": {
+    "nome": "Administração",
+    "icone": "fas fa-briefcase",
+    "descricao": "Gestão, RH, financeiro, contabilidade, etc."
+  },
+  "engenharia": {
+    "nome": "Engenharia",
+    "icone": "fas fa-cogs",
+    "descricao": "Civil, produção, elétrica, mecânica, etc."
+  },
+  "direito": {
+    "nome": "Direito",
+    "icone": "fas fa-balance-scale",
+    "descricao": "Advocacia, jurídico, cartório, etc."
+  },
+  "educacao": {
+    "nome": "Educação",
+    "icone": "fas fa-chalkboard-teacher",
+    "descricao": "Professor, pedagogia, coordenação, etc."
+  },
+  "comercio": {
+    "nome": "Comércio",
+    "icone": "fas fa-store",
+    "descricao": "Vendas, atendimento, varejo, etc."
+  },
+  "criatividade": {
+    "nome": "Criatividade",
+    "icone": "fas fa-paint-brush",
+    "descricao": "Design, publicidade, marketing, etc."
+  },
+  "logistica": {
+    "nome": "Logística",
+    "icone": "fas fa-truck",
+    "descricao": "Transporte, estoque, almoxarifado, etc."
+  },
+  "industria": {
+    "nome": "Indústria",
+    "icone": "fas fa-industry",
+    "descricao": "Produção, chão de fábrica, manutenção, etc."
+  }
+} 

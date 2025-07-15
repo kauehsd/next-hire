@@ -702,7 +702,10 @@ document.querySelectorAll('.nav-link').forEach(link => {
   });
 });
 
-document.getElementById('ctaBuscarVagas').onclick = () => ativarGuia('buscar');
+document.getElementById('ctaBuscarVagas').onclick = () => {
+  ativarGuia('buscar');
+  setTimeout(() => buscarVagas(), 200); // Executa busca após trocar de guia
+};
 document.getElementById('abrirLoginBuscar').onclick = abrirModalLogin;
 
 // Tabs login/cadastro

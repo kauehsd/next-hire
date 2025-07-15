@@ -3,7 +3,7 @@ const router = express.Router();
 const { buscarVagas } = require('../utils/scraper');
 
 // Rota para buscar vagas reais do banco e de múltiplas fontes
-router.get('/vagas', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const perfil = {
       cargo: req.query.cargo || '',
