@@ -1,45 +1,23 @@
-# Buscador de Vagas Inteligente
+# NextHire – Buscador de Vagas Inteligente
 
-Sistema web inteligente que analisa o perfil do usuário e busca vagas na internet, recomendando oportunidades personalizadas para inscrição.
+Sistema web inteligente que analisa o perfil do usuário e busca vagas em múltiplas fontes, recomendando oportunidades personalizadas.
 
 ## ✨ Funcionalidades
 
-- **Perfil Personalizado**: Cadastro completo com tecnologias, nível, localização e pretensão salarial
-- **Busca Inteligente**: Web scraping de sites reais de vagas (Remotar, LinkedIn)
-- **Filtros Avançados**: Matching automático por tecnologias, nível e localização
-- **Interface Moderna**: Design responsivo com cores claras e UX otimizada
-- **Sistema de Favoritos**: Salvar vagas interessantes no navegador
-- **Fallback Inteligente**: Dados mock quando scraping falha
-- **Múltiplas Fontes**: Busca em diversos sites simultaneamente
+- **Perfil Personalizado:** Cadastro completo com tecnologias, nível, localização e pretensão salarial.
+- **Busca Inteligente:** Web scraping de sites reais de vagas (Remotar, LinkedIn, etc).
+- **Filtros Avançados:** Matching automático por tecnologias, nível e localização.
+- **Interface Moderna:** Design responsivo em React, com gradientes e UX otimizada.
+- **Sistema de Favoritos:** Salvar vagas interessantes no navegador.
+- **Fallback Inteligente:** Dados mock quando scraping ou API falha.
+- **Múltiplas Fontes:** Busca em diversos sites simultaneamente.
 
 ## 🛠️ Tecnologias
 
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **Backend**: Node.js + Express
-- **Scraping**: Axios + Cheerio
-- **Design**: CSS Grid, Flexbox, Gradientes modernos
-
-## 📁 Estrutura
-
-```
-buscador-vagas-inteligente/
-├── frontend/
-│   ├── index.html          # Interface principal
-│   ├── script.js           # Lógica do frontend
-│   └── style.css           # Estilos modernos e responsivos
-├── backend/
-│   ├── app.js              # Servidor Express
-│   ├── config.js           # Configurações do projeto
-│   ├── routes/
-│   │   └── vagas.js        # Rotas da API
-│   └── utils/
-│       ├── filtroVagas.js  # Lógica de filtragem
-│       └── scraper.js      # Web scraping de vagas
-├── perfil/
-│   └── usuario.json        # Perfil do usuário
-├── .gitignore
-└── README.md
-```
+- **Frontend:** React, CSS3, FontAwesome, localStorage
+- **Backend:** Node.js, Express, Mongoose, MongoDB Atlas, dotenv, cors, axios, cheerio, bcryptjs, nodemailer
+- **Hospedagem:** Vercel (frontend), Render (backend), MongoDB Atlas (banco)
+- **Extras:** Web scraping, API REST, variáveis de ambiente, deploy cloud
 
 ## 🚀 Como rodar
 
@@ -47,86 +25,63 @@ buscador-vagas-inteligente/
 ```bash
 cd backend
 npm install
+cd ../frontend
+npm install
 ```
 
-### 2. Configurar perfil
-Edite o arquivo `perfil/usuario.json` ou use a interface web:
-```json
-{
-  "nome": "Seu Nome",
-  "email": "seu@email.com",
-  "tecnologias": ["JavaScript", "React", "Node.js"],
-  "localizacao": "São Paulo, SP",
-  "nivel": "Pleno"
-}
+### 2. Configurar variáveis de ambiente
+No backend, crie um arquivo `.env`:
+```
+MONGODB_URI=...
+PORT=3000
 ```
 
-### 3. Iniciar servidor
+### 3. Iniciar backend
 ```bash
 cd backend
 npm start
 ```
 
-### 4. Acessar aplicação
-Abra o arquivo `frontend/index.html` no navegador ou use um servidor local.
-
-## 🔧 Configuração
-
-### Variáveis de Ambiente
-Crie um arquivo `.env` no backend (opcional):
-```env
-PORT=3000
-NODE_ENV=development
-SCRAPING_TIMEOUT=10000
+### 4. Iniciar frontend
+```bash
+cd frontend
+npm run dev
 ```
 
-### Personalização
-- **Cores**: Edite as variáveis CSS em `frontend/style.css`
-- **Fontes de vagas**: Configure URLs em `backend/config.js`
-- **Filtros**: Ajuste lógica em `backend/utils/filtroVagas.js`
+### 5. Deploy
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Banco:** MongoDB Atlas
 
-## 📊 Fluxo do Sistema
+## 🧩 Estrutura
 
-1. **Cadastro de Perfil**: Usuário define tecnologias, nível e localização
-2. **Busca Inteligente**: Sistema faz scraping de múltiplos sites
-3. **Filtragem Avançada**: Vagas são filtradas por relevância
-4. **Apresentação**: Interface mostra vagas recomendadas
-5. **Interação**: Usuário pode favoritar e acessar vagas
+```
+buscador-vagas-inteligente/
+├── frontend/      # React app
+├── backend/       # Node.js/Express API
+├── perfil/        # Dados de perfil de exemplo
+├── README.md
+```
 
-## 🎯 Algoritmo de Matching
+## 🐞 Solução de Problemas
 
-O sistema usa um algoritmo inteligente que considera:
-- **Tecnologias**: Matching por palavras-chave e sinônimos
-- **Nível**: Júnior, Pleno, Sênior
-- **Localização**: Remoto, presencial ou híbrido
-- **Relevância**: Ordenação por número de tecnologias em comum
+- **Erro de conexão com banco:** Verifique variável MONGODB_URI e IP liberado no Atlas.
+- **API não responde:** Render pode estar dormindo, aguarde alguns segundos.
+- **Vagas não aparecem:** Veja logs do backend e do Atlas.
 
-## 🔒 Segurança e Ética
+## 📋 Roadmap
 
-- **Rate Limiting**: Delays entre requisições para não sobrecarregar sites
-- **User-Agent**: Headers apropriados para identificação
-- **Fallback**: Sistema funciona mesmo se scraping falhar
-- **Respeito**: Apenas dados públicos são coletados
-
-## 🚧 Limitações
-
-- Alguns sites podem ter proteções anti-bot
-- Dependência da estrutura HTML dos sites
-- Necessidade de atualização periódica dos seletores
-
-## 🔄 Próximas Funcionalidades
-
-- [ ] Cache de resultados
-- [ ] Mais sites de vagas
+- [ ] Melhorar acessibilidade
+- [ ] Adicionar mais fontes de vagas
 - [ ] Notificações por email
 - [ ] Dashboard de estatísticas
-- [ ] API pública
-- [ ] Sistema de login
 
-## 📝 Licença
+---
 
-MIT License - veja o arquivo LICENSE para detalhes.
+Contribuições são bem-vindas! 
 
-## 🤝 Contribuição
+---
 
-Contribuições são bem-vindas! Por favor, leia as diretrizes de contribuição antes de submeter um PR. 
+## Observação Final
+
+Este projeto foi desenvolvido como portfólio para demonstrar habilidades em React, Node.js, MongoDB, scraping e integração cloud. O NextHire está pronto para uso e expansão, mas foi pausado devido à limitação de APIs públicas de grandes portais de vagas e à necessidade de parcerias para escalar comercialmente. Sinta-se à vontade para explorar, clonar e evoluir o sistema! 

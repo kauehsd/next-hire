@@ -293,6 +293,45 @@ async function scrapeIndeed(tecnologias, nivel, localizacao) {
   }
 }
 
+// Função para fazer scraping do site Gupy
+async function scrapeGupy() {
+  const axios = require('axios');
+  const cheerio = require('cheerio');
+  const vagas = [];
+  try {
+    // Exemplo: busca vagas de tecnologia na página principal do Gupy
+    const url = 'https://portal.gupy.io/job-search/positions?term=tecnologia';
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      },
+      timeout: 10000
+    });
+    const $ = cheerio.load(response.data);
+    $('.sc-tilXH bXwqkq').each((i, el) => {
+      const titulo = $(el).find('h2').text().trim();
+      const empresa = $(el).find('.sc-hHLeRK').text().trim();
+      const localizacao = $(el).find('.sc-dkPtRN').text().trim();
+      const link = $(el).find('a').attr('href');
+      if (titulo && link) {
+        vagas.push({
+          titulo,
+          empresa: empresa || 'Empresa não informada',
+          localizacao: localizacao || 'Remoto',
+          salario: 'A combinar',
+          tecnologias: ['Não especificado'],
+          nivel: 'Não especificado',
+          link: link.startsWith('http') ? link : `https://portal.gupy.io${link}`,
+          fonte: 'Gupy'
+        });
+      }
+    });
+  } catch (error) {
+    registrarAlerta('Gupy', `Erro ao acessar Gupy: ${error.message}`);
+  }
+  return vagas;
+}
+
 // Função principal para buscar vagas de múltiplas fontes
 async function buscarVagas(perfil) {
   const { cargo, nivel, localizacao, tipo } = perfil;
@@ -303,7 +342,8 @@ async function buscarVagas(perfil) {
   const resultados = await Promise.allSettled([
     scrapeIndeed(cargo, nivel, localizacao, tipo),
     scrapeRemotar(cargo, nivel, localizacao, tipo),
-    scrapeLinkedIn(cargo, nivel, localizacao, tipo)
+    scrapeLinkedIn(cargo, nivel, localizacao, tipo),
+    scrapeGupy() // Adicionado scraping do Gupy
   ]);
 
   resultados.forEach((result, idx) => {
@@ -313,6 +353,7 @@ async function buscarVagas(perfil) {
         if (idx === 0) fontes.push('Indeed');
         if (idx === 1) fontes.push('Remotar');
         if (idx === 2) fontes.push('LinkedIn');
+        if (idx === 3) fontes.push('Gupy'); // Adicionado Gupy às fontes
       }
     }
   });
@@ -341,5 +382,6 @@ module.exports = {
   buscarVagas,
   scrapeRemotar,
   scrapeLinkedIn,
-  scrapeIndeed
+  scrapeIndeed,
+  scrapeGupy
 }; 

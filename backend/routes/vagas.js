@@ -30,26 +30,4 @@ router.get('/temas-areas', (req, res) => {
   }
 });
 
-// Rota para obter temas de áreas
-router.get('/temas-areas', (req, res) => {
-  const dataPath = path.join(__dirname, '../../frontend/data/temas-areas.json');
-  try {
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    res.json(data);
-  } catch (err) {
-    res.status(404).json({ erro: 'Dados de temas de áreas não encontrados.' });
-  }
-});
-
-// Rota para obter temas de áreas
-router.get('/temas-areas', (req, res) => {
-  const dataPath = path.join(__dirname, '../../frontend/data/temas-areas.json');
-  try {
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    res.json(data);
-  } catch (err) {
-    res.status(404).json({ erro: 'Dados de temas de áreas não encontrados.' });
-  }
-});
-
 module.exports = router; 

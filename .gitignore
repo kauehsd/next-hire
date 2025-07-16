@@ -2,4 +2,6 @@ node_modules/
 .env
 .DS_Store
 *.log
-frontend/*.log 
+frontend/*.log
+backend/*.log
+scraping_alertas.log 
